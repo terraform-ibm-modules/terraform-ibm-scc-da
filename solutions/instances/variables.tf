@@ -70,6 +70,13 @@ variable "scc_cos_key_name" {
   description = "The name for the key created for the Security and Compliance Center Object Storage bucket. Applies only if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
 }
 
+variable "ibmcloud_kms_api_key" {
+  type        = string
+  description = "The IBM Cloud API key with access to create a root key and key ring in the key management service instance. If the KMS instance is in a different account, specify a key from that account. If not specified, the ibmcloud_api_key variable is used."
+  sensitive   = true
+  default     = null
+}
+
 ########################################################################################################################
 # COS variables
 ########################################################################################################################

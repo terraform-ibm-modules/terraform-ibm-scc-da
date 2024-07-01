@@ -38,6 +38,27 @@ locals {
   scc_workload_protection_instance_name     = var.prefix != null ? "${var.prefix}-${var.scc_workload_protection_instance_name}" : var.scc_workload_protection_instance_name
   scc_workload_protection_resource_key_name = var.prefix != null ? "${var.prefix}-${var.scc_workload_protection_instance_name}-key" : "${var.scc_workload_protection_instance_name}-key"
   scc_cos_bucket_name                       = var.prefix != null ? "${var.prefix}-${var.scc_cos_bucket_name}" : var.scc_cos_bucket_name
+  apply_auth_policy                         = var.ibmcloud_kms_api_key != null ? 1 : 0
+
+  kms_service = var.existing_kms_instance_crn != null ? (
+    can(regex(".*kms.*", var.existing_kms_instance_crn)) ? "kms" : (
+      can(regex(".*hs-crypto.*", var.existing_kms_instance_crn)) ? "hs-crypto" : null
+    )
+  ) : null
+}
+
+# Create IAM Authorization Policy to allow COS to access KMS for the encryption key
+resource "ibm_iam_authorization_policy" "cos_kms_policy" {
+  count = local.apply_auth_policy
+  # Conditionals with providers aren't possible, using ibm.kms as provider incase cross account is enabled
+  provider                    = ibm.kms
+  source_service_account      = data.ibm_iam_account_settings.iam_account_settings.account_id
+  source_service_name         = "cloud-object-storage"
+  source_resource_instance_id = local.cos_instance_guid
+  target_service_name         = local.kms_service
+  target_resource_instance_id = local.existing_kms_guid
+  roles                       = ["Reader"]
+  description                 = "Allow the COS instance with GUID ${local.cos_instance_guid} reader access to the kms_service instance GUID ${local.existing_kms_guid}"
 }
 
 # KMS root key for SCC COS bucket
@@ -79,6 +100,7 @@ locals {
   scc_cos_kms_key_crn = var.existing_scc_cos_bucket_name != null ? null : var.existing_scc_cos_kms_key_crn != null ? var.existing_scc_cos_kms_key_crn : module.kms[0].keys[format("%s.%s", local.scc_cos_key_ring_name, local.scc_cos_key_name)].crn
   cos_instance_crn    = var.existing_cos_instance_crn != null ? var.existing_cos_instance_crn : module.cos[0].cos_instance_crn
   cos_bucket_name     = var.existing_scc_cos_bucket_name != null ? var.existing_scc_cos_bucket_name : module.cos[0].buckets[local.scc_cos_bucket_name].bucket_name
+  cos_instance_guid   = var.existing_cos_instance_crn != null ? element(split(":", var.existing_cos_instance_crn), length(split(":", var.existing_cos_instance_crn)) - 3) : module.cos[0].cos_instance_guid
 
   activity_tracking = var.existing_activity_tracker_crn != null ? {
     read_data_events     = true
@@ -114,7 +136,7 @@ module "cos" {
     kms_encryption_enabled        = true
     kms_guid                      = local.existing_kms_guid
     kms_key_crn                   = local.scc_cos_kms_key_crn
-    skip_iam_authorization_policy = var.skip_cos_kms_auth_policy
+    skip_iam_authorization_policy = local.apply_auth_policy == 1 ? true : var.skip_cos_kms_auth_policy
     management_endpoint_type      = var.management_endpoint_type_for_bucket
     storage_class                 = var.scc_cos_bucket_class
     resource_instance_id          = local.cos_instance_crn
