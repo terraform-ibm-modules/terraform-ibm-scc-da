@@ -167,6 +167,12 @@ variable "existing_activity_tracker_crn" {
 # SCC variables
 ########################################################################################################################
 
+variable "existing_scc_instance_crn" {
+  type        = string
+  default     = null
+  description = "The CRN of an existing Security and Compliance Center instance. If not supplied, a new instance will be created."
+}
+
 variable "scc_instance_name" {
   type        = string
   default     = "base-security-services-scc"

@@ -130,11 +130,28 @@ module "cos" {
 # SCC Instance
 #######################################################################################################################
 
+locals {
+  parsed_existing_scc_instance_crn = var.existing_scc_instance_crn != null ? split(":", var.existing_scc_instance_crn) : []
+  existing_scc_instance_guid       = length(local.parsed_existing_scc_instance_crn) > 0 ? local.parsed_existing_scc_instance_crn[7] : null
+  existing_scc_instance_region     = length(local.parsed_existing_scc_instance_crn) > 0 ? local.parsed_existing_scc_instance_crn[5] : null
+
+  scc_instance_crn    = var.existing_scc_instance_crn == null ? module.scc[0].crn : var.existing_scc_instance_crn
+  scc_instance_guid   = var.existing_scc_instance_crn == null ? module.scc[0].guid : local.existing_scc_instance_guid
+  scc_instance_region = var.existing_scc_instance_crn == null ? var.scc_region : local.existing_scc_instance_region
+
+}
+
+moved {
+  from = module.scc
+  to   = module.scc[0]
+}
+
 module "scc" {
+  count                             = var.existing_scc_instance_crn == null ? 1 : 0
   source                            = "terraform-ibm-modules/scc/ibm"
   version                           = "1.6.3"
   resource_group_id                 = module.resource_group.resource_group_id
-  region                            = var.scc_region
+  region                            = local.scc_instance_region
   instance_name                     = local.scc_instance_name
   plan                              = var.scc_service_plan
   cos_bucket                        = local.cos_bucket_name
@@ -163,7 +180,7 @@ module "create_profile_attachment" {
   }
   profile_name           = each.key
   profile_version        = "latest"
-  scc_instance_id        = module.scc.guid
+  scc_instance_id        = local.scc_instance_guid
   attachment_name        = "${each.value + 1} daily full account attachment"
   attachment_description = "SCC profile attachment scoped to your specific IBM Cloud account id ${data.ibm_iam_account_settings.iam_account_settings.account_id} with a daily attachment schedule."
   attachment_schedule    = "daily"
@@ -223,7 +240,7 @@ resource "ibm_en_topic" "en_topic" {
   name          = "SCC Topic"
   description   = "Topic for SCC events routing"
   sources {
-    id = module.scc.crn
+    id = local.scc_instance_crn
     rules {
       enabled           = true
       event_type_filter = "$.*"

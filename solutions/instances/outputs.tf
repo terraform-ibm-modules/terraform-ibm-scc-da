@@ -14,22 +14,22 @@ output "resource_group_id" {
 
 output "scc_id" {
   description = "SCC instance ID"
-  value       = module.scc.id
+  value       = var.existing_scc_instance_crn == null ? module.scc[0].id : null
 }
 
 output "scc_guid" {
   description = "SCC instance guid"
-  value       = module.scc.guid
+  value       = var.existing_scc_instance_crn == null ? module.scc[0].guid : null
 }
 
 output "scc_crn" {
   description = "SCC instance CRN"
-  value       = module.scc.crn
+  value       = var.existing_scc_instance_crn == null ? module.scc[0].crn : null
 }
 
 output "scc_name" {
   description = "SCC instance name"
-  value       = module.scc.name
+  value       = var.existing_scc_instance_crn == null ? module.scc[0].name : null
 }
 
 output "scc_workload_protection_id" {

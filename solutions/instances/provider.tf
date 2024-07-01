@@ -4,7 +4,7 @@
 
 provider "ibm" {
   ibmcloud_api_key = var.ibmcloud_api_key
-  region           = var.scc_region
+  region           = local.scc_instance_region
 }
 
 provider "ibm" {
