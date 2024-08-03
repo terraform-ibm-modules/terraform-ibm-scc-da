@@ -16,7 +16,7 @@ module "resource_group" {
 
 module "cos" {
   source                 = "terraform-ibm-modules/cos/ibm"
-  version                = "8.6.2"
+  version                = "8.9.2"
   resource_group_id      = module.resource_group.resource_group_id
   region                 = var.region
   cos_instance_name      = "${var.prefix}-cos"
@@ -32,7 +32,7 @@ module "cos" {
 
 module "cloud_monitoring" {
   source                  = "terraform-ibm-modules/observability-instances/ibm//modules/cloud_monitoring"
-  version                 = "2.13.2"
+  version                 = "2.14.0"
   resource_group_id       = module.resource_group.resource_group_id
   region                  = var.region
   instance_name           = "${var.prefix}-mon"
@@ -46,7 +46,7 @@ module "cloud_monitoring" {
 
 module "event_notifications" {
   source            = "terraform-ibm-modules/event-notifications/ibm"
-  version           = "1.6.9"
+  version           = "1.9.1"
   resource_group_id = module.resource_group.resource_group_id
   name              = "${var.prefix}-en"
   tags              = var.resource_tags
