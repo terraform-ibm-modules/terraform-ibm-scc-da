@@ -26,10 +26,16 @@ module "resource_group" {
 # KMS Key
 #######################################################################################################################
 
+module "existing_kms_crn_parser" {
+  count   = var.existing_kms_instance_crn != null ? 1 : 0
+  source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version = "1.0.0"
+  crn     = var.existing_kms_instance_crn
+}
+
 locals {
-  parsed_existing_kms_instance_crn = var.existing_kms_instance_crn != null ? split(":", var.existing_kms_instance_crn) : []
-  kms_region                       = length(local.parsed_existing_kms_instance_crn) > 0 ? local.parsed_existing_kms_instance_crn[5] : null
-  existing_kms_guid                = length(local.parsed_existing_kms_instance_crn) > 0 ? local.parsed_existing_kms_instance_crn[7] : null
+  kms_region        = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].region : null
+  existing_kms_guid = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_instance : null
 
   scc_cos_key_ring_name                     = var.prefix != null ? "${var.prefix}-${var.scc_cos_key_ring_name}" : var.scc_cos_key_ring_name
   scc_cos_key_name                          = var.prefix != null ? "${var.prefix}-${var.scc_cos_key_name}" : var.scc_cos_key_name
@@ -38,6 +44,22 @@ locals {
   scc_workload_protection_instance_name     = var.prefix != null ? "${var.prefix}-${var.scc_workload_protection_instance_name}" : var.scc_workload_protection_instance_name
   scc_workload_protection_resource_key_name = var.prefix != null ? "${var.prefix}-${var.scc_workload_protection_instance_name}-key" : "${var.scc_workload_protection_instance_name}-key"
   scc_cos_bucket_name                       = var.prefix != null ? "${var.prefix}-${var.scc_cos_bucket_name}" : var.scc_cos_bucket_name
+  create_cross_account_auth_policy          = nonsensitive(!var.skip_cos_kms_auth_policy && var.ibmcloud_kms_api_key != null)
+
+  kms_service_name = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].service_name : null
+}
+
+# Create IAM Authorization Policy to allow COS to access KMS for the encryption key, if cross account KMS is passed in
+resource "ibm_iam_authorization_policy" "cos_kms_policy" {
+  count                       = local.create_cross_account_auth_policy ? 1 : 0
+  provider                    = ibm.kms
+  source_service_account      = data.ibm_iam_account_settings.iam_account_settings.account_id
+  source_service_name         = "cloud-object-storage"
+  source_resource_instance_id = local.cos_instance_guid
+  target_service_name         = local.kms_service_name
+  target_resource_instance_id = local.existing_kms_guid
+  roles                       = ["Reader"]
+  description                 = "Allow COS instance in the account ${data.ibm_iam_account_settings.iam_account_settings.account_id} to read from the ${local.kms_service_name} instance GUID ${local.existing_kms_guid}"
 }
 
 # KMS root key for SCC COS bucket
@@ -75,11 +97,39 @@ module "kms" {
 # COS
 #######################################################################################################################
 
+module "existing_cos_crn_parser" {
+  count   = var.existing_cos_instance_crn != null ? 1 : 0
+  source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version = "1.0.0"
+  crn     = var.existing_cos_instance_crn
+}
+
 locals {
   scc_cos_kms_key_crn = var.existing_scc_cos_bucket_name != null ? null : var.existing_scc_cos_kms_key_crn != null ? var.existing_scc_cos_kms_key_crn : module.kms[0].keys[format("%s.%s", local.scc_cos_key_ring_name, local.scc_cos_key_name)].crn
   cos_instance_crn    = var.existing_cos_instance_crn != null ? var.existing_cos_instance_crn : module.cos[0].cos_instance_crn
-  cos_bucket_name     = var.existing_scc_cos_bucket_name != null ? var.existing_scc_cos_bucket_name : module.cos[0].buckets[local.scc_cos_bucket_name].bucket_name
+  cos_bucket_name     = var.existing_scc_cos_bucket_name != null ? var.existing_scc_cos_bucket_name : module.buckets.buckets[local.scc_cos_bucket_name].bucket_name
+  cos_instance_guid   = var.existing_cos_instance_crn != null ? module.existing_cos_crn_parser[0].service_instance : module.cos[0].cos_instance_guid
 
+}
+
+# moved {
+#  from = module.cos[0].module.buckets.module.buckets[local.scc_cos_bucket_name].ibm_cos_bucket.cos_bucket[0]
+#  to   = module.buckets.module.buckets[local.scc_cos_bucket_name].ibm_cos_bucket.cos_bucket[0]
+# }
+
+moved {
+  from = module.cos[0].module.buckets.ibm_iam_authorization_policy.policy[0]
+  to   = module.buckets.ibm_iam_authorization_policy.policy[0]
+}
+
+moved {
+  from = module.cos[0].module.buckets.time_sleep.wait_for_authorization_policy[0]
+  to   = module.buckets.time_sleep.wait_for_authorization_policy[0]
+}
+
+moved {
+  from = module.cos[0].module.buckets.module.buckets[0].random_string.bucket_name_suffix[0]
+  to   = module.buckets.module.buckets[0].random_string.bucket_name_suffix[0]
 }
 
 module "cos" {
@@ -96,6 +146,14 @@ module "cos" {
   existing_cos_instance_id = var.existing_cos_instance_crn
   access_tags              = var.cos_instance_access_tags
   cos_plan                 = "standard"
+}
+
+module "buckets" {
+  providers = {
+    ibm = ibm.cos
+  }
+  source  = "terraform-ibm-modules/cos/ibm//modules/buckets"
+  version = "8.11.14"
   bucket_configs = [{
     access_tags                   = var.scc_cos_bucket_access_tags
     add_bucket_name_suffix        = var.add_bucket_name_suffix
@@ -103,7 +161,7 @@ module "cos" {
     kms_encryption_enabled        = true
     kms_guid                      = local.existing_kms_guid
     kms_key_crn                   = local.scc_cos_kms_key_crn
-    skip_iam_authorization_policy = var.skip_cos_kms_auth_policy
+    skip_iam_authorization_policy = local.create_cross_account_auth_policy || var.skip_cos_kms_auth_policy
     management_endpoint_type      = var.management_endpoint_type_for_bucket
     storage_class                 = var.scc_cos_bucket_class
     resource_instance_id          = local.cos_instance_crn
@@ -121,16 +179,22 @@ module "cos" {
       metrics_monitoring_crn  = var.existing_monitoring_crn
     }
   }]
-
 }
 
 #######################################################################################################################
 # SCC Instance
 #######################################################################################################################
+
+module "existing_scc_crn_parser" {
+  count   = var.existing_scc_instance_crn != null ? 1 : 0
+  source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version = "1.0.0"
+  crn     = var.existing_scc_instance_crn
+}
+
 locals {
-  parsed_existing_scc_instance_crn = var.existing_scc_instance_crn != null ? split(":", var.existing_scc_instance_crn) : []
-  existing_scc_instance_region     = length(local.parsed_existing_scc_instance_crn) > 0 ? local.parsed_existing_scc_instance_crn[5] : null
-  scc_instance_region              = var.existing_scc_instance_crn == null ? var.scc_region : local.existing_scc_instance_region
+  existing_scc_instance_region = var.existing_scc_instance_crn != null ? module.existing_scc_crn_parser[0].region : null
+  scc_instance_region          = var.existing_scc_instance_crn == null ? var.scc_region : local.existing_scc_instance_region
 }
 
 moved {
@@ -141,7 +205,7 @@ moved {
 module "scc" {
   source                            = "terraform-ibm-modules/scc/ibm"
   existing_scc_instance_crn         = var.existing_scc_instance_crn
-  version                           = "1.8.10"
+  version                           = "1.8.12"
   resource_group_id                 = module.resource_group.resource_group_id
   region                            = local.scc_instance_region
   instance_name                     = local.scc_instance_name
@@ -243,11 +307,17 @@ module "scc_wp" {
 # SCC Event Notifications Configuration
 #######################################################################################################################
 
+module "existing_en_crn_parser" {
+  count   = var.existing_en_crn != null ? 1 : 0
+  source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
+  version = "1.0.0"
+  crn     = var.existing_en_crn
+}
+
 locals {
-  parsed_existing_en_instance_crn = var.existing_en_crn != null ? split(":", var.existing_en_crn) : []
-  existing_en_guid                = length(local.parsed_existing_en_instance_crn) > 0 ? local.parsed_existing_en_instance_crn[7] : null
-  en_topic                        = var.prefix != null ? "${var.prefix} - SCC Topic" : "SCC Topic"
-  en_subscription_email           = var.prefix != null ? "${var.prefix} - Email for Security and Compliance Center Subscription" : "Email for Security and Compliance Center Subscription"
+  existing_en_guid      = var.existing_en_crn != null ? module.existing_en_crn_parser[0].service_instance : null
+  en_topic              = var.prefix != null ? "${var.prefix} - SCC Topic" : "SCC Topic"
+  en_subscription_email = var.prefix != null ? "${var.prefix} - Email for Security and Compliance Center Subscription" : "Email for Security and Compliance Center Subscription"
 }
 
 data "ibm_en_destinations" "en_destinations" {

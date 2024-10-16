@@ -87,12 +87,12 @@ output "scc_cos_kms_key_crn" {
 
 output "scc_cos_bucket_name" {
   description = "SCC COS bucket name"
-  value       = var.existing_scc_cos_bucket_name != null ? var.existing_scc_cos_bucket_name : module.cos[0].buckets[local.scc_cos_bucket_name].bucket_name
+  value       = var.existing_scc_cos_bucket_name != null ? var.existing_scc_cos_bucket_name : module.buckets.buckets[local.scc_cos_bucket_name].bucket_name
 }
 
 output "scc_cos_bucket_config" {
   description = "List of buckets created"
-  value       = var.existing_scc_cos_bucket_name != null ? null : module.cos[0].buckets[local.scc_cos_bucket_name]
+  value       = var.existing_scc_cos_bucket_name != null ? null : module.buckets.buckets[local.scc_cos_bucket_name]
 }
 
 output "scc_cos_instance_id" {
