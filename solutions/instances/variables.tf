@@ -39,7 +39,7 @@ variable "prefix" {
 variable "existing_kms_instance_crn" {
   type        = string
   default     = null
-  description = "The CRN of the existing Hyper Protect Crypto Services or Key Protect instance. Applies only if not supplying an existing KMS root key and if `skip_cos_kms_auth_policy` is true."
+  description = "The CRN of the existing KMS instance (Hyper Protect Crypto Services or Key Protect). If the KMS instance is in different account you must also provide a value for `ibmcloud_kms_api_key`."
 }
 
 variable "existing_scc_cos_kms_key_crn" {
@@ -68,6 +68,13 @@ variable "scc_cos_key_name" {
   type        = string
   default     = "scc-cos-key"
   description = "The name for the key created for the Security and Compliance Center Object Storage bucket. Applies only if not specifying an existing key. If a prefix input variable is specified, the prefix is added to the name in the `<prefix>-<name>` format."
+}
+
+variable "ibmcloud_kms_api_key" {
+  type        = string
+  description = "The IBM Cloud API key that can create a root key and key ring in the key management service (KMS) instance. If not specified, the 'ibmcloud_api_key' variable is used. Specify this key if the instance in `existing_kms_instance_crn` is in an account that's different from the Security and Compliance Centre instance. Leave this input empty if the same account owns both instances."
+  sensitive   = true
+  default     = null
 }
 
 ########################################################################################################################
@@ -142,7 +149,7 @@ variable "existing_scc_cos_bucket_name" {
 
 variable "skip_cos_kms_auth_policy" {
   type        = bool
-  description = "Set to `true` to skip the creation of an IAM authorization policy that permits the Object Storage instance to read the encryption key from the KMS instance. An authorization policy must exist before an encrypted bucket can be created."
+  description = "Set to `true` to skip the creation of an IAM authorization policy that permits the Object Storage instance created to read the encryption key from the KMS instance. If set to false, pass in a value for the KMS instance in the `existing_kms_instance_crn` variable. If a value is specified for `ibmcloud_kms_api_key`, the policy is created in the KMS account."
   default     = false
 }
 
