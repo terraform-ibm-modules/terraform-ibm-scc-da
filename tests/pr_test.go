@@ -89,7 +89,7 @@ func TestAgentsInSchematics(t *testing.T) {
 
 		options := testschematic.TestSchematicOptionsDefault(&testschematic.TestSchematicOptions{
 			Testing: t,
-			Prefix:  "scc-wp-agents",
+			Prefix:  "scc-wp-agt",
 			TarIncludePatterns: []string{
 				agentFlavorDir + "/*.*",
 				agentsKubeconfigDir + "/*.*",
@@ -174,7 +174,7 @@ func TestRunUpgradeInstances(t *testing.T) {
 	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
 		Testing:      t,
 		TerraformDir: instanceFlavorDir,
-		Prefix:       "scc-ins-upg",
+		Prefix:       "scc-upg",
 	})
 
 	options.TerraformVars = map[string]interface{}{
@@ -201,7 +201,7 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 	// Provision COS, Sysdig and EN first
 	// ------------------------------------------------------------------------------------
 
-	prefix := fmt.Sprintf("scc-exist-%s", strings.ToLower(random.UniqueId()))
+	prefix := fmt.Sprintf("scc-ext-%s", strings.ToLower(random.UniqueId()))
 	realTerraformDir := "./resources/existing-resources/instances"
 	tempTerraformDir, _ := files.CopyTerraformFolderToTemp(realTerraformDir, fmt.Sprintf(prefix+"-%s", strings.ToLower(random.UniqueId())))
 	tags := common.GetTagsFromTravis()
