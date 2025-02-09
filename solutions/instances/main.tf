@@ -115,7 +115,7 @@ module "kms" {
   }
   count                       = var.existing_scc_cos_kms_key_crn != null || var.existing_scc_cos_bucket_name != null || var.existing_scc_instance_crn != null ? 0 : 1 # no need to create any KMS resources if passing an existing key or bucket, or SCC instance
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "4.19.2"
+  version                     = "4.19.5"
   create_key_protect_instance = false
   region                      = local.kms_region
   existing_kms_instance_crn   = var.existing_kms_instance_crn
@@ -187,7 +187,7 @@ module "cos" {
   }
   count                    = var.existing_scc_cos_bucket_name == null && var.existing_scc_instance_crn == null ? 1 : 0 # no need to call COS module if consumer is passing existing SCC instance or COS bucket
   source                   = "terraform-ibm-modules/cos/ibm//modules/fscloud"
-  version                  = "8.16.5"
+  version                  = "8.19.2"
   resource_group_id        = module.resource_group.resource_group_id
   create_cos_instance      = var.existing_cos_instance_crn == null ? true : false # don't create instance if existing one passed in
   cos_instance_name        = local.cos_instance_name
@@ -206,7 +206,7 @@ module "buckets" {
   count          = local.create_cross_account_auth_policy ? 1 : 0
   depends_on     = [time_sleep.wait_for_authorization_policy[0]]
   source         = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version        = "8.16.5"
+  version        = "8.19.2"
   bucket_configs = local.bucket_config
 }
 
