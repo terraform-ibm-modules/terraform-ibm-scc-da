@@ -60,7 +60,10 @@ locals {
   scc_instance_name                         = try("${local.prefix}-${var.scc_instance_name}", var.scc_instance_name)
   scc_workload_protection_instance_name     = try("${local.prefix}-${var.scc_workload_protection_instance_name}", var.scc_workload_protection_instance_name)
   scc_workload_protection_resource_key_name = try("${local.prefix}-${var.scc_workload_protection_instance_name}-key", "${var.scc_workload_protection_instance_name}-key")
-  scc_cos_bucket_name                       = try("${local.prefix}-${var.scc_cos_bucket_name}", var.scc_cos_bucket_name)
+  # bucket name to be passed to the COS module to create a bucket
+  created_scc_cos_bucket_name = try("${local.prefix}-${var.scc_cos_bucket_name}", var.scc_cos_bucket_name)
+  # Final COS bucket name - either passed in or after being created by COS
+  scc_cos_bucket_name = var.existing_scc_cos_bucket_name != null ? var.existing_scc_cos_bucket_name : local.create_cross_account_auth_policy ? module.buckets[0].buckets[local.created_scc_cos_bucket_name].bucket_name : module.cos[0].buckets[local.created_scc_cos_bucket_name].bucket_name
 
   create_cross_account_auth_policy = !var.skip_cos_kms_auth_policy && var.ibmcloud_kms_api_key == null ? false : (data.ibm_iam_account_settings.iam_account_settings.account_id != module.existing_kms_crn_parser[0].account_id)
   use_kms_module                   = !(var.existing_scc_cos_kms_key_crn != null || var.existing_scc_cos_bucket_name != null || var.existing_scc_instance_crn != null)
@@ -162,7 +165,7 @@ locals {
   bucket_config = [{
     access_tags                   = var.scc_cos_bucket_access_tags
     add_bucket_name_suffix        = var.add_bucket_name_suffix
-    bucket_name                   = local.scc_cos_bucket_name
+    bucket_name                   = local.created_scc_cos_bucket_name
     kms_encryption_enabled        = true
     kms_guid                      = local.existing_kms_guid
     kms_key_crn                   = local.scc_cos_kms_key_crn
