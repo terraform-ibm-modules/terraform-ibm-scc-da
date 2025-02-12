@@ -92,7 +92,7 @@ output "scc_cos_bucket_name" {
 
 output "scc_cos_bucket_config" {
   description = "List of buckets created"
-  value       = var.existing_scc_instance_crn == null ? var.existing_scc_cos_bucket_name != null ? null : local.create_cross_account_auth_policy ? module.buckets[0].buckets[local.created_scc_cos_bucket_name] : module.cos[0].buckets[local.created_scc_cos_bucket_name] : null
+  value       = var.existing_scc_instance_crn == null ? var.existing_scc_cos_bucket_name != null ? null : local.create_cross_account_auth_policy ? module.buckets[0].buckets[local.scc_cos_bucket_name] : module.cos[0].buckets[local.scc_cos_bucket_name] : null
 }
 
 output "scc_cos_instance_id" {

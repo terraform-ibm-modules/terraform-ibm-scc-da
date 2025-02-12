@@ -114,7 +114,6 @@ func TestRunUpgradeInstances(t *testing.T) {
 // A test to pass existing resources to the SCC instances DA
 func TestRunExistingResourcesInstances(t *testing.T) {
 	t.Parallel()
-
 	// ------------------------------------------------------------------------------------
 	// Provision COS, Sysdig and EN first
 	// ------------------------------------------------------------------------------------
@@ -151,10 +150,38 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 	} else {
 
 		// ------------------------------------------------------------------------------------
-		// Deploy SCC instances DA passing in existing COS instance, bucket, Sysdig and EN details
+		// Deploy SCC instances DA passing in existing COS instance (not bucket), KMS key and Sysdig
 		// ------------------------------------------------------------------------------------
 
 		options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
+			Testing:      t,
+			TerraformDir: instanceFlavorDir,
+			// Do not hard fail the test if the implicit destroy steps fail to allow a full destroy of resource to occur
+			ImplicitRequired: false,
+			TerraformVars: map[string]interface{}{
+				"prefix":                              prefix,
+				"cos_region":                          region,
+				"scc_region":                          region,
+				"resource_group_name":                 terraform.Output(t, existingTerraformOptions, "resource_group_name"),
+				"use_existing_resource_group":         true,
+				"existing_monitoring_crn":             terraform.Output(t, existingTerraformOptions, "monitoring_crn"),
+				"existing_kms_instance_crn":           permanentResources["hpcs_south_crn"],
+				"kms_endpoint_type":                   "public",
+				"provider_visibility":                 "public",
+				"existing_cos_instance_crn":           terraform.Output(t, existingTerraformOptions, "cos_crn"),
+				"management_endpoint_type_for_bucket": "public",
+			},
+		})
+
+		output, err := options.RunTestConsistency()
+		assert.Nil(t, err, "This should not have errored")
+		assert.NotNil(t, output, "Expected some output")
+
+		// ------------------------------------------------------------------------------------
+		// Deploy SCC instances DA passing in existing COS instance, bucket, Sysdig and EN details
+		// ------------------------------------------------------------------------------------
+
+		options2 := testhelper.TestOptionsDefault(&testhelper.TestOptions{
 			Testing:      t,
 			TerraformDir: instanceFlavorDir,
 			// Do not hard fail the test if the implicit destroy steps fail to allow a full destroy of resource to occur
@@ -173,34 +200,6 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 				"provider_visibility":                 "public",
 				"existing_en_crn":                     terraform.Output(t, existingTerraformOptions, "en_crn"),
 				"en_source_name":                      prefix, // This name must be unique per SCC instance that is integrated with the Event Notifications instance.
-			},
-		})
-
-		output, err := options.RunTestConsistency()
-		assert.Nil(t, err, "This should not have errored")
-		assert.NotNil(t, output, "Expected some output")
-
-		// ------------------------------------------------------------------------------------
-		// Deploy SCC instances DA passing in existing COS instance (not bucket), KMS key and Sysdig
-		// ------------------------------------------------------------------------------------
-
-		options2 := testhelper.TestOptionsDefault(&testhelper.TestOptions{
-			Testing:      t,
-			TerraformDir: instanceFlavorDir,
-			// Do not hard fail the test if the implicit destroy steps fail to allow a full destroy of resource to occur
-			ImplicitRequired: false,
-			TerraformVars: map[string]interface{}{
-				"prefix":                              prefix,
-				"cos_region":                          region,
-				"scc_region":                          region,
-				"resource_group_name":                 terraform.Output(t, existingTerraformOptions, "resource_group_name"),
-				"use_existing_resource_group":         true,
-				"existing_monitoring_crn":             terraform.Output(t, existingTerraformOptions, "monitoring_crn"),
-				"existing_kms_instance_crn":           permanentResources["hpcs_south_crn"],
-				"kms_endpoint_type":                   "public",
-				"provider_visibility":                 "public",
-				"existing_cos_instance_crn":           terraform.Output(t, existingTerraformOptions, "cos_crn"),
-				"management_endpoint_type_for_bucket": "public",
 			},
 		})
 
