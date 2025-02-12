@@ -198,7 +198,7 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 				"existing_cos_instance_crn":           terraform.Output(t, existingTerraformOptions, "cos_crn"),
 				"management_endpoint_type_for_bucket": "public",
 				"provider_visibility":                 "public",
-				// Temporarily removing this because of provider issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5890
+				// Temporarily removed because of provider issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5890
 				// "existing_en_crn":                     terraform.Output(t, existingTerraformOptions, "en_crn"),
 				// "en_source_name":                      prefix, // This name must be unique per SCC instance that is integrated with the Event Notifications instance.
 			},
