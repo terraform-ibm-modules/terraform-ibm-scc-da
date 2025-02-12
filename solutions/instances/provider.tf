@@ -21,3 +21,10 @@ provider "ibm" {
   region           = var.cos_region
   visibility       = var.provider_visibility
 }
+
+provider "ibm" {
+  alias            = "en"
+  ibmcloud_api_key = var.ibmcloud_api_key
+  region           = local.existing_en_region
+  visibility       = var.provider_visibility
+}
