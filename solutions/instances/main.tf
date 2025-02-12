@@ -20,7 +20,7 @@ locals {
 module "resource_group" {
   source                       = "terraform-ibm-modules/resource-group/ibm"
   version                      = "1.1.6"
-  resource_group_name          = var.use_existing_resource_group == false ? (var.prefix != null ? "${var.prefix}-${var.resource_group_name}" : var.resource_group_name) : null
+  resource_group_name          = var.use_existing_resource_group == false ? try("${local.prefix}-${var.resource_group_name}", var.resource_group_name) : null
   existing_resource_group_name = var.use_existing_resource_group == true ? var.resource_group_name : null
 }
 
@@ -49,13 +49,16 @@ locals {
   kms_account_id    = var.existing_kms_instance_crn != null ? module.existing_kms_crn_parser[0].account_id : null
   kms_key_id        = var.existing_scc_instance_crn == null && length(module.existing_kms_key_crn_parser) > 0 ? module.existing_kms_key_crn_parser[0].resource : null
 
-  scc_cos_key_ring_name                     = var.prefix != null ? "${var.prefix}-${var.scc_cos_key_ring_name}" : var.scc_cos_key_ring_name
-  scc_cos_key_name                          = var.prefix != null ? "${var.prefix}-${var.scc_cos_key_name}" : var.scc_cos_key_name
-  cos_instance_name                         = var.prefix != null ? "${var.prefix}-${var.cos_instance_name}" : var.cos_instance_name
-  scc_instance_name                         = var.prefix != null ? "${var.prefix}-${var.scc_instance_name}" : var.scc_instance_name
-  scc_workload_protection_instance_name     = var.prefix != null ? "${var.prefix}-${var.scc_workload_protection_instance_name}" : var.scc_workload_protection_instance_name
-  scc_workload_protection_resource_key_name = var.prefix != null ? "${var.prefix}-${var.scc_workload_protection_instance_name}-key" : "${var.scc_workload_protection_instance_name}-key"
-  scc_cos_bucket_name                       = var.prefix != null ? "${var.prefix}-${var.scc_cos_bucket_name}" : var.scc_cos_bucket_name
+  prefix = var.prefix != null ? (var.prefix != "" ? var.prefix : null) : null
+
+
+  scc_cos_key_ring_name                     = try("${local.prefix}-${var.scc_cos_key_ring_name}", var.scc_cos_key_ring_name)
+  scc_cos_key_name                          = try("${local.prefix}-${var.scc_cos_key_name}", var.scc_cos_key_name)
+  cos_instance_name                         = try("${local.prefix}-${var.cos_instance_name}", var.cos_instance_name)
+  scc_instance_name                         = try("${local.prefix}-${var.scc_instance_name}", var.scc_instance_name)
+  scc_workload_protection_instance_name     = try("${local.prefix}-${var.scc_workload_protection_instance_name}", var.scc_workload_protection_instance_name)
+  scc_workload_protection_resource_key_name = try("${local.prefix}-${var.scc_workload_protection_instance_name}-key", "${var.scc_workload_protection_instance_name}-key")
+  scc_cos_bucket_name                       = try("${local.prefix}-${var.scc_cos_bucket_name}", var.scc_cos_bucket_name)
 
   create_cross_account_auth_policy = !var.skip_cos_kms_auth_policy && var.ibmcloud_kms_api_key == null ? false : (data.ibm_iam_account_settings.iam_account_settings.account_id != module.existing_kms_crn_parser[0].account_id)
 }
@@ -347,9 +350,9 @@ module "existing_en_crn_parser" {
 
 locals {
   existing_en_guid      = var.existing_en_crn != null ? module.existing_en_crn_parser[0].service_instance : null
-  en_topic              = var.prefix != null ? "${var.prefix} - SCC Topic" : "SCC Topic"
+  en_topic              = try("${local.prefix}-SCC Topic", "SCC Topic")
   existing_en_region    = var.existing_en_crn != null ? module.existing_en_crn_parser[0].region : null
-  en_subscription_email = var.prefix != null ? "${var.prefix} - Email for Security and Compliance Center Subscription" : "Email for Security and Compliance Center Subscription"
+  en_subscription_email = try("${local.prefix}-Email for Security and Compliance Center Subscription", "Email for Security and Compliance Center Subscription")
 }
 
 data "ibm_en_destinations" "en_destinations" {
