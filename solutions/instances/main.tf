@@ -252,6 +252,7 @@ module "scc" {
   attach_wp_to_scc_instance         = var.provision_scc_workload_protection && var.existing_scc_instance_crn == null
   wp_instance_crn                   = var.provision_scc_workload_protection && var.existing_scc_instance_crn == null ? module.scc_wp[0].crn : null
   skip_scc_wp_auth_policy           = var.skip_scc_workload_protection_auth_policy
+  cbr_rules                         = var.cbr_rules
 }
 
 #######################################################################################################################
