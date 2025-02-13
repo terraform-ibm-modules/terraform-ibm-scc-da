@@ -1,6 +1,6 @@
 # Configuring complex inputs for SCC in IBM Cloud projects
 
-Several optional input variables in the IBM Cloud [Deployable architecture](https://cloud.ibm.com/catalog#deployable_architecture) use complex object types. You specify these inputs when you configure deployable architecture.
+Several optional input variables in the IBM Cloud [SCC Deployable architecture](https://cloud.ibm.com/catalog#deployable_architecture) use complex object types. You specify these inputs when you configure deployable architecture.
 
 * Context-Based Restrictions Rules (`cbr_rules`)
 
