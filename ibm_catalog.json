@@ -311,6 +311,21 @@
             },
             {
               "key": "scc_workload_protection_access_tags"
+            },
+            {
+              "key": "existing_activity_tracker_crn"
+            },
+            {
+              "key": "ibmcloud_kms_api_key"
+            },
+            {
+              "key": "scc_en_email_list"
+            },
+            {
+              "key": "scc_en_from_email"
+            },
+            {
+              "key": "scc_en_reply_to_email"
             }
           ],
           "iam_permissions": [
