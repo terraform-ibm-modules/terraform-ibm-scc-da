@@ -218,20 +218,20 @@ variable "scc_service_plan" {
   }
 }
 
-variable "existing_en_crn" {
+variable "existing_event_notifications_crn" {
   type        = string
   nullable    = true
   default     = null
   description = "The CRN of an Event Notification instance. Used to integrate with Security and Compliance Center."
 }
 
-variable "en_source_name" {
+variable "event_notifications_source_name" {
   type        = string
   default     = "compliance"
   description = "The source name to use for the Event Notifications integration. Required if a value is passed for `en_instance_crn`. This name must be unique per SCC instance that is integrated with the Event Notifications instance."
 }
 
-variable "en_source_description" {
+variable "event_notifications_source_description" {
   type        = string
   default     = null
   description = "Optional description to give for the Event Notifications integration source. Only used if a value is passed for `en_instance_crn`."
@@ -334,19 +334,19 @@ variable "scc_workload_protection_access_tags" {
 # EN Configuration variables
 ########################################################################################################################
 
-variable "scc_en_from_email" {
+variable "scc_event_notifications_from_email" {
   type        = string
-  description = "The `from` email address used in any Security and Compliance Center events from Event Notifications."
+  description = "The `from` email address used in any Security and Compliance Center events coming via Event Notifications."
   default     = "compliancealert@ibm.com"
 }
 
-variable "scc_en_reply_to_email" {
+variable "scc_event_notifications_reply_to_email" {
   type        = string
-  description = "The `reply_to` email address used in any Security and Compliance Center events from Event Notifications."
+  description = "The `reply_to` email address used in any Security and Compliance Center events coming via Event Notifications."
   default     = "no-reply@ibm.com"
 }
 
-variable "scc_en_email_list" {
+variable "scc_event_notifications_email_list" {
   type        = list(string)
   description = "The list of email addresses to notify when Security and Compliance Center triggers an event."
   default     = []

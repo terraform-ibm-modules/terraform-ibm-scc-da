@@ -12,8 +12,9 @@ locals {
   # tflint-ignore: terraform_unused_declarations
   validate_auth_inputs = !var.skip_scc_cos_auth_policy && var.existing_cos_instance_crn == null && var.existing_scc_cos_bucket_name != null ? tobool("A value must be passed for 'existing_cos_instance_crn' in order to create auth policy.") : true
   # tflint-ignore: terraform_unused_declarations
-  validate_en_integration = var.existing_en_crn != null && var.en_source_name == null ? tobool("When passing a value for 'existing_en_crn', a value must also be passed for 'en_source_name'.") : false
+  validate_en_integration = var.existing_event_notifications_crn != null && var.event_notifications_source_name == null ? tobool("When passing a value for 'existing_event_notifications_crn', a value must also be passed for 'event_notifications_source_name'.") : false
 }
+
 
 #######################################################################################################################
 # Resource Group
@@ -249,9 +250,9 @@ module "scc" {
   plan                              = var.scc_service_plan
   cos_bucket                        = local.scc_cos_bucket_name
   cos_instance_crn                  = local.cos_instance_crn
-  en_instance_crn                   = var.existing_en_crn
-  en_source_name                    = var.en_source_name
-  en_source_description             = var.en_source_description
+  en_instance_crn                   = var.existing_event_notifications_crn
+  en_source_name                    = var.event_notifications_source_name
+  en_source_description             = var.event_notifications_source_description
   skip_cos_iam_authorization_policy = var.skip_scc_cos_auth_policy
   resource_tags                     = var.scc_instance_tags
   attach_wp_to_scc_instance         = var.provision_scc_workload_protection && var.existing_scc_instance_crn == null
@@ -348,22 +349,22 @@ module "scc_wp" {
 #######################################################################################################################
 
 module "existing_en_crn_parser" {
-  count   = var.existing_en_crn != null ? 1 : 0
+  count   = var.existing_event_notifications_crn != null ? 1 : 0
   source  = "terraform-ibm-modules/common-utilities/ibm//modules/crn-parser"
   version = "1.1.0"
-  crn     = var.existing_en_crn
+  crn     = var.existing_event_notifications_crn
 }
 
 locals {
-  existing_en_guid      = var.existing_en_crn != null ? module.existing_en_crn_parser[0].service_instance : null
+  existing_en_guid      = var.existing_event_notifications_crn != null ? module.existing_en_crn_parser[0].service_instance : null
   en_topic              = try("${local.prefix}-SCC Topic", "SCC Topic")
-  existing_en_region    = var.existing_en_crn != null ? module.existing_en_crn_parser[0].region : null
+  existing_en_region    = var.existing_event_notifications_crn != null ? module.existing_en_crn_parser[0].region : null
   en_subscription_email = try("${local.prefix}-Email for Security and Compliance Center Subscription", "Email for Security and Compliance Center Subscription")
 }
 
 data "ibm_en_destinations" "en_destinations" {
   provider      = ibm.en
-  count         = var.existing_en_crn != null ? 1 : 0
+  count         = var.existing_event_notifications_crn != null ? 1 : 0
   instance_guid = local.existing_en_guid
 }
 
@@ -376,7 +377,7 @@ resource "time_sleep" "wait_for_scc" {
 
 resource "ibm_en_topic" "en_topic" {
   provider      = ibm.en
-  count         = var.existing_en_crn != null && var.existing_scc_instance_crn == null ? 1 : 0
+  count         = var.existing_event_notifications_crn != null && var.existing_scc_instance_crn == null ? 1 : 0
   depends_on    = [time_sleep.wait_for_scc]
   instance_guid = local.existing_en_guid
   name          = local.en_topic
@@ -392,7 +393,7 @@ resource "ibm_en_topic" "en_topic" {
 
 resource "ibm_en_subscription_email" "email_subscription" {
   provider       = ibm.en
-  count          = var.existing_en_crn != null && var.existing_scc_instance_crn == null && length(var.scc_en_email_list) > 0 ? 1 : 0
+  count          = var.existing_event_notifications_crn != null && var.existing_scc_instance_crn == null && length(var.scc_event_notifications_email_list) > 0 ? 1 : 0
   instance_guid  = local.existing_en_guid
   name           = local.en_subscription_email
   description    = "Subscription for Security and Compliance Center Events"
@@ -400,9 +401,9 @@ resource "ibm_en_subscription_email" "email_subscription" {
   topic_id       = ibm_en_topic.en_topic[count.index].topic_id
   attributes {
     add_notification_payload = true
-    reply_to_mail            = var.scc_en_reply_to_email
+    reply_to_mail            = var.scc_event_notifications_reply_to_email
     reply_to_name            = "SCC Event Notifications Bot"
-    from_name                = var.scc_en_from_email
-    invited                  = var.scc_en_email_list
+    from_name                = var.scc_event_notifications_from_email
+    invited                  = var.scc_event_notifications_email_list
   }
 }

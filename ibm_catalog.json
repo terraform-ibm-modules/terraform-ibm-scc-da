@@ -61,6 +61,23 @@
               "key": "ibmcloud_api_key"
             },
             {
+              "key": "prefix",
+              "required": true,
+              "description": "The prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
+            },
+            {
+              "key": "use_existing_resource_group",
+              "required": true
+            },
+            {
+              "key": "resource_group_name",
+              "required": true
+            },
+            {
+              "key": "existing_kms_instance_crn",
+              "required": true
+            },
+            {
               "key": "provider_visibility",
               "options": [
                 {
@@ -78,22 +95,7 @@
               ]
             },
             {
-              "key": "use_existing_resource_group"
-            },
-            {
-              "key": "resource_group_name"
-            },
-            {
-              "key": "prefix",
-              "required": true,
-              "description": "The prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
-            },
-            {
               "key": "existing_monitoring_crn"
-            },
-            {
-              "key": "existing_kms_instance_crn",
-              "required": true
             },
             {
               "key": "existing_scc_instance_crn"
@@ -243,13 +245,13 @@
               ]
             },
             {
-              "key": "existing_en_crn"
+              "key": "existing_event_notifications_crn"
             },
             {
-              "key": "en_source_name"
+              "key": "event_notifications_source_name"
             },
             {
-              "key": "en_source_description"
+              "key": "event_notifications_source_description"
             },
             {
               "key": "scc_instance_tags"
@@ -319,13 +321,13 @@
               "key": "ibmcloud_kms_api_key"
             },
             {
-              "key": "scc_en_email_list"
+              "key": "scc_event_notifications_email_list"
             },
             {
-              "key": "scc_en_from_email"
+              "key": "scc_event_notifications_from_email"
             },
             {
-              "key": "scc_en_reply_to_email"
+              "key": "scc_event_notifications_reply_to_email"
             },
             {
               "key": "cbr_rules"
