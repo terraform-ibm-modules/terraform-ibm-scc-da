@@ -182,13 +182,6 @@ variable "management_endpoint_type_for_bucket" {
   }
 }
 
-variable "existing_activity_tracker_crn" {
-  type        = string
-  nullable    = true
-  default     = null
-  description = "The CRN of an Activity Tracker instance to send Security and Compliance Object Storage bucket events to. If no value passed, events are sent to the instance associated to the container's location unless otherwise specified in the Activity Tracker Event Routing service configuration. Ignored if using existing Object Storage bucket."
-}
-
 ########################################################################################################################
 # SCC variables
 ########################################################################################################################
@@ -237,13 +230,13 @@ variable "existing_event_notifications_crn" {
 variable "event_notifications_source_name" {
   type        = string
   default     = "compliance"
-  description = "The source name to use for the Event Notifications integration. Required if a value is passed for `en_instance_crn`. This name must be unique per SCC instance that is integrated with the Event Notifications instance."
+  description = "The source name to use for the Event Notifications integration. Required if a value is passed for `event_notifications_instance_crn`. This name must be unique per SCC instance that is integrated with the Event Notifications instance."
 }
 
 variable "event_notifications_source_description" {
   type        = string
   default     = null
-  description = "Optional description to give for the Event Notifications integration source. Only used if a value is passed for `en_instance_crn`."
+  description = "Optional description to give for the Event Notifications integration source. Only used if a value is passed for `event_notifications_instance_crn`."
 }
 
 variable "scc_instance_tags" {

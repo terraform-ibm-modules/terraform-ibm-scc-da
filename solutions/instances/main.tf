@@ -177,10 +177,9 @@ locals {
     region_location               = var.cos_region
     force_delete                  = true
     activity_tracking = {
-      read_data_events     = true
-      write_data_events    = true
-      management_events    = true
-      activity_tracker_crn = var.existing_activity_tracker_crn
+      read_data_events  = true
+      write_data_events = true
+      management_events = true
     }
     metrics_monitoring = {
       usage_metrics_enabled   = true
