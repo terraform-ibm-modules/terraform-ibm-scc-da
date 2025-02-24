@@ -313,9 +313,6 @@
               "key": "scc_workload_protection_access_tags"
             },
             {
-              "key": "existing_activity_tracker_crn"
-            },
-            {
               "key": "ibmcloud_kms_api_key"
             },
             {
