@@ -61,6 +61,58 @@
               "key": "ibmcloud_api_key"
             },
             {
+              "key": "prefix",
+              "required": true,
+              "description": "The prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
+            },
+            {
+              "key": "use_existing_resource_group",
+              "required": true
+            },
+            {
+              "key": "resource_group_name",
+              "required": true
+            },
+            {
+              "key": "scc_region",
+              "required": true,
+              "options": [
+                {
+                  "displayname": "Dallas (us-south)",
+                  "value": "us-south"
+                },
+                {
+                  "displayname": "Frankfurt (eu-de)",
+                  "value": "eu-de"
+                },
+                {
+                  "displayname": "Madrid (eu-es)",
+                  "value": "eu-es"
+                },
+                {
+                  "displayname": "Toronto (ca-tor)",
+                  "value": "ca-tor"
+                }
+              ]
+            },
+            {
+              "key": "cos_region",
+              "required": true,
+              "type": "string",
+              "custom_config": {
+                "config_constraints": {
+                  "generationType": "2"
+                },
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "type": "region"
+              }
+            },
+            {
+              "key": "existing_kms_instance_crn",
+              "required": true
+            },
+            {
               "key": "provider_visibility",
               "options": [
                 {
@@ -78,69 +130,59 @@
               ]
             },
             {
-              "key": "use_existing_resource_group"
-            },
-            {
-              "key": "resource_group_name"
-            },
-            {
-              "key": "prefix",
-              "required": true,
-              "description": "The prefix to add to all resources that this solution creates. To not use any prefix value, you can enter the string `__NULL__`."
-            },
-            {
-              "key": "existing_monitoring_crn"
-            },
-            {
-              "key": "existing_kms_instance_crn",
-              "required": true
-            },
-            {
               "key": "existing_scc_instance_crn"
             },
             {
-              "key": "existing_scc_cos_kms_key_crn"
+              "key": "scc_instance_name"
             },
             {
-              "key": "kms_endpoint_type",
+              "key": "scc_instance_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
+            },
+            {
+              "key": "scc_service_plan",
               "options": [
                 {
-                  "displayname": "Public",
-                  "value": "public"
+                  "displayname": "Standard",
+                  "value": "security-compliance-center-standard-plan"
                 },
                 {
-                  "displayname": "Private",
-                  "value": "private"
+                  "displayname": "Trial",
+                  "value": "security-compliance-center-trial-plan"
                 }
               ]
             },
             {
-              "key": "scc_cos_key_ring_name"
-            },
-            {
-              "key": "scc_cos_key_name"
-            },
-            {
-              "custom_config": {
-                "config_constraints": {
-                  "generationType": "2"
-                },
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "type": "region"
-              },
-              "key": "cos_region",
-              "required": true,
-              "type": "string"
+              "key": "existing_cos_instance_crn"
             },
             {
               "key": "cos_instance_name"
             },
             {
-              "key": "cos_instance_tags"
+              "key": "cos_instance_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
-              "key": "cos_instance_access_tags"
+              "key": "cos_instance_access_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
               "key": "scc_cos_bucket_name"
@@ -149,7 +191,14 @@
               "key": "add_bucket_name_suffix"
             },
             {
-              "key": "scc_cos_bucket_access_tags"
+              "key": "scc_cos_bucket_access_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
               "key": "scc_cos_bucket_class",
@@ -177,13 +226,7 @@
               ]
             },
             {
-              "key": "existing_cos_instance_crn"
-            },
-            {
               "key": "existing_scc_cos_bucket_name"
-            },
-            {
-              "key": "skip_cos_kms_auth_policy"
             },
             {
               "key": "management_endpoint_type_for_bucket",
@@ -203,59 +246,38 @@
               ]
             },
             {
-              "key": "scc_instance_name"
-            },
-            {
-              "key": "scc_region",
-              "options": [
-                {
-                  "displayname": "Dallas (us-south)",
-                  "value": "us-south"
-                },
-                {
-                  "displayname": "Frankfurt (eu-de)",
-                  "value": "eu-de"
-                },
-                {
-                  "displayname": "Madrid (eu-es)",
-                  "value": "eu-es"
-                },
-                {
-                  "displayname": "Toronto (ca-tor)",
-                  "value": "ca-tor"
-                }
-              ]
+              "key": "existing_monitoring_crn"
             },
             {
               "key": "skip_scc_cos_auth_policy"
             },
             {
-              "key": "scc_service_plan",
+              "key": "existing_scc_cos_kms_key_crn"
+            },
+            {
+              "key": "ibmcloud_kms_api_key"
+            },
+            {
+              "key": "kms_endpoint_type",
               "options": [
                 {
-                  "displayname": "Standard",
-                  "value": "security-compliance-center-standard-plan"
+                  "displayname": "Public",
+                  "value": "public"
                 },
                 {
-                  "displayname": "Trial",
-                  "value": "security-compliance-center-trial-plan"
+                  "displayname": "Private",
+                  "value": "private"
                 }
               ]
             },
             {
-              "key": "existing_en_crn"
+              "key": "skip_cos_kms_auth_policy"
             },
             {
-              "key": "en_source_name"
+              "key": "scc_cos_key_ring_name"
             },
             {
-              "key": "en_source_description"
-            },
-            {
-              "key": "scc_instance_tags"
-            },
-            {
-              "key": "skip_scc_workload_protection_auth_policy"
+              "key": "scc_cos_key_name"
             },
             {
               "key": "profile_attachments"
@@ -304,25 +326,55 @@
               ]
             },
             {
-              "key": "scc_workload_protection_instance_tags"
+              "key": "scc_workload_protection_instance_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
-              "key": "scc_workload_protection_resource_key_tags"
+              "key": "scc_workload_protection_resource_key_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
-              "key": "scc_workload_protection_access_tags"
+              "key": "scc_workload_protection_access_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
-              "key": "ibmcloud_kms_api_key"
+              "key": "skip_scc_workload_protection_auth_policy"
             },
             {
-              "key": "scc_en_email_list"
+              "key": "existing_event_notifications_crn"
             },
             {
-              "key": "scc_en_from_email"
+              "key": "event_notifications_source_name"
             },
             {
-              "key": "scc_en_reply_to_email"
+              "key": "event_notifications_source_description"
+            },
+            {
+              "key": "scc_event_notifications_email_list"
+            },
+            {
+              "key": "scc_event_notifications_from_email"
+            },
+            {
+              "key": "scc_event_notifications_reply_to_email"
             },
             {
               "key": "cbr_rules"
