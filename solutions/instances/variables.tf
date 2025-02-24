@@ -182,13 +182,6 @@ variable "management_endpoint_type_for_bucket" {
   }
 }
 
-variable "existing_activity_tracker_crn" {
-  type        = string
-  nullable    = true
-  default     = null
-  description = "The CRN of an Activity Tracker instance to send Security and Compliance Object Storage bucket events to. If no value passed, events are sent to the instance associated to the container's location unless otherwise specified in the Activity Tracker Event Routing service configuration. Ignored if using existing Object Storage bucket."
-}
-
 ########################################################################################################################
 # SCC variables
 ########################################################################################################################
