@@ -74,8 +74,26 @@
               "required": true
             },
             {
-              "key": "existing_kms_instance_crn",
-              "required": true
+              "key": "scc_region",
+              "required": true,
+              "options": [
+                {
+                  "displayname": "Dallas (us-south)",
+                  "value": "us-south"
+                },
+                {
+                  "displayname": "Frankfurt (eu-de)",
+                  "value": "eu-de"
+                },
+                {
+                  "displayname": "Madrid (eu-es)",
+                  "value": "eu-es"
+                },
+                {
+                  "displayname": "Toronto (ca-tor)",
+                  "value": "ca-tor"
+                }
+              ]
             },
             {
               "key": "provider_visibility",
@@ -95,32 +113,26 @@
               ]
             },
             {
-              "key": "existing_monitoring_crn"
+              "key": "scc_instance_name"
             },
             {
-              "key": "existing_scc_instance_crn"
+              "key": "scc_instance_tags"
             },
             {
-              "key": "existing_scc_cos_kms_key_crn"
-            },
-            {
-              "key": "kms_endpoint_type",
+              "key": "scc_service_plan",
               "options": [
                 {
-                  "displayname": "Public",
-                  "value": "public"
+                  "displayname": "Standard",
+                  "value": "security-compliance-center-standard-plan"
                 },
                 {
-                  "displayname": "Private",
-                  "value": "private"
+                  "displayname": "Trial",
+                  "value": "security-compliance-center-trial-plan"
                 }
               ]
             },
             {
-              "key": "scc_cos_key_ring_name"
-            },
-            {
-              "key": "scc_cos_key_name"
+              "key": "existing_scc_instance_crn"
             },
             {
               "custom_config": {
@@ -137,6 +149,9 @@
             },
             {
               "key": "cos_instance_name"
+            },
+            {
+              "key": "existing_cos_instance_crn"
             },
             {
               "key": "cos_instance_tags"
@@ -179,13 +194,7 @@
               ]
             },
             {
-              "key": "existing_cos_instance_crn"
-            },
-            {
               "key": "existing_scc_cos_bucket_name"
-            },
-            {
-              "key": "skip_cos_kms_auth_policy"
             },
             {
               "key": "management_endpoint_type_for_bucket",
@@ -205,59 +214,45 @@
               ]
             },
             {
-              "key": "scc_instance_name"
+              "key": "existing_monitoring_crn"
             },
             {
-              "key": "scc_region",
-              "options": [
-                {
-                  "displayname": "Dallas (us-south)",
-                  "value": "us-south"
-                },
-                {
-                  "displayname": "Frankfurt (eu-de)",
-                  "value": "eu-de"
-                },
-                {
-                  "displayname": "Madrid (eu-es)",
-                  "value": "eu-es"
-                },
-                {
-                  "displayname": "Toronto (ca-tor)",
-                  "value": "ca-tor"
-                }
-              ]
+              "key": "existing_activity_tracker_crn"
             },
             {
               "key": "skip_scc_cos_auth_policy"
             },
             {
-              "key": "scc_service_plan",
+              "key": "existing_kms_instance_crn",
+              "required": true
+            },
+            {
+              "key": "existing_scc_cos_kms_key_crn"
+            },
+            {
+              "key": "ibmcloud_kms_api_key"
+            },
+            {
+              "key": "kms_endpoint_type",
               "options": [
                 {
-                  "displayname": "Standard",
-                  "value": "security-compliance-center-standard-plan"
+                  "displayname": "Public",
+                  "value": "public"
                 },
                 {
-                  "displayname": "Trial",
-                  "value": "security-compliance-center-trial-plan"
+                  "displayname": "Private",
+                  "value": "private"
                 }
               ]
             },
             {
-              "key": "existing_event_notifications_crn"
+              "key": "skip_cos_kms_auth_policy"
             },
             {
-              "key": "event_notifications_source_name"
+              "key": "scc_cos_key_ring_name"
             },
             {
-              "key": "event_notifications_source_description"
-            },
-            {
-              "key": "scc_instance_tags"
-            },
-            {
-              "key": "skip_scc_workload_protection_auth_policy"
+              "key": "scc_cos_key_name"
             },
             {
               "key": "profile_attachments"
@@ -315,10 +310,16 @@
               "key": "scc_workload_protection_access_tags"
             },
             {
-              "key": "existing_activity_tracker_crn"
+              "key": "skip_scc_workload_protection_auth_policy"
             },
             {
-              "key": "ibmcloud_kms_api_key"
+              "key": "existing_event_notifications_crn"
+            },
+            {
+              "key": "event_notifications_source_name"
+            },
+            {
+              "key": "event_notifications_source_description"
             },
             {
               "key": "scc_event_notifications_email_list"
