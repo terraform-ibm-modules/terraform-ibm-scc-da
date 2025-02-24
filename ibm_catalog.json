@@ -116,7 +116,14 @@
               "key": "scc_instance_name"
             },
             {
-              "key": "scc_instance_tags"
+              "key": "scc_instance_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
               "key": "scc_service_plan",
@@ -154,10 +161,24 @@
               "key": "existing_cos_instance_crn"
             },
             {
-              "key": "cos_instance_tags"
+              "key": "cos_instance_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
-              "key": "cos_instance_access_tags"
+              "key": "cos_instance_access_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
               "key": "scc_cos_bucket_name"
@@ -166,7 +187,14 @@
               "key": "add_bucket_name_suffix"
             },
             {
-              "key": "scc_cos_bucket_access_tags"
+              "key": "scc_cos_bucket_access_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
               "key": "scc_cos_bucket_class",
@@ -298,13 +326,34 @@
               ]
             },
             {
-              "key": "scc_workload_protection_instance_tags"
+              "key": "scc_workload_protection_instance_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
-              "key": "scc_workload_protection_resource_key_tags"
+              "key": "scc_workload_protection_resource_key_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
-              "key": "scc_workload_protection_access_tags"
+              "key": "scc_workload_protection_access_tags",
+              "custom_config": {
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "config_constraints": {
+                  "type": "string"
+                }
+              }
             },
             {
               "key": "skip_scc_workload_protection_auth_policy"
