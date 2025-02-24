@@ -96,6 +96,19 @@
               ]
             },
             {
+              "key": "cos_region",
+              "required": true,
+              "type": "string",
+              "custom_config": {
+                "config_constraints": {
+                  "generationType": "2"
+                },
+                "grouping": "deployment",
+                "original_grouping": "deployment",
+                "type": "region"
+              }
+            },
+            {
               "key": "provider_visibility",
               "options": [
                 {
@@ -140,19 +153,6 @@
             },
             {
               "key": "existing_scc_instance_crn"
-            },
-            {
-              "custom_config": {
-                "config_constraints": {
-                  "generationType": "2"
-                },
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "type": "region"
-              },
-              "key": "cos_region",
-              "required": true,
-              "type": "string"
             },
             {
               "key": "cos_instance_name"
