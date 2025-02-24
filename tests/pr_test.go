@@ -92,7 +92,7 @@ func TestRunUpgradeInstances(t *testing.T) {
 	options := testhelper.TestOptionsDefault(&testhelper.TestOptions{
 		Testing:      t,
 		TerraformDir: instanceFlavorDir,
-		Prefix:       "scc-ins-upg",
+		Prefix:       "scc-upg",
 	})
 
 	options.TerraformVars = map[string]interface{}{
