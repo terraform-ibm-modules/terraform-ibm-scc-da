@@ -166,7 +166,7 @@ variable "existing_scc_cos_bucket_name" {
   description = "The name of an existing bucket inside the existing Object Storage instance to use for Security and Compliance Center. If not specified, a bucket is created."
 }
 
-variable "skip_cos_kms_auth_policy" {
+variable "skip_cos_kms_iam_auth_policy" {
   type        = bool
   description = "Set to `true` to skip the creation of an IAM authorization policy that permits the Object Storage instance created to read the encryption key from the KMS instance. If set to false, pass in a value for the KMS instance in the `existing_kms_instance_crn` variable. If a value is specified for `ibmcloud_kms_api_key`, the policy is created in the KMS account."
   default     = false
@@ -204,7 +204,7 @@ variable "scc_region" {
   description = "The region to provision Security and Compliance Center resources in."
 }
 
-variable "skip_scc_cos_auth_policy" {
+variable "skip_scc_cos_iam_auth_policy" {
   type        = bool
   default     = false
   description = "Set to `true` to skip creation of an IAM authorization policy that permits the Security and Compliance Center to write to the Object Storage instance created by this solution. Applies only if `existing_scc_instance_crn` is not provided."
@@ -245,7 +245,7 @@ variable "scc_instance_tags" {
   default     = []
 }
 
-variable "skip_scc_workload_protection_auth_policy" {
+variable "skip_scc_workload_protection_iam_auth_policy" {
   type        = bool
   default     = false
   description = "Set to `true` to skip creating an IAM authorization policy that permits the Security and Compliance Center instance to read from the Workload Protection instance. Applies only if `provision_scc_workload_protection` is true."

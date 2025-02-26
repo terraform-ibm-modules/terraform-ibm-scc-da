@@ -176,15 +176,28 @@
             },
             {
               "key": "scc_cos_bucket_region",
-              "type": "string",
-              "custom_config": {
-                "config_constraints": {
-                  "generationType": "2"
+              "options": [
+                {
+                  "displayname": "Same region as SCC instance",
+                  "value": "__NULL__"
                 },
-                "grouping": "deployment",
-                "original_grouping": "deployment",
-                "type": "region"
-              }
+                {
+                  "displayname": "Dallas (us-south)",
+                  "value": "us-south"
+                },
+                {
+                  "displayname": "Frankfurt (eu-de)",
+                  "value": "eu-de"
+                },
+                {
+                  "displayname": "Madrid (eu-es)",
+                  "value": "eu-es"
+                },
+                {
+                  "displayname": "Toronto (ca-tor)",
+                  "value": "ca-tor"
+                }
+              ]
             },
             {
               "key": "add_bucket_name_suffix"
@@ -248,7 +261,7 @@
               "key": "existing_monitoring_crn"
             },
             {
-              "key": "skip_scc_cos_auth_policy"
+              "key": "skip_scc_cos_iam_auth_policy"
             },
             {
               "key": "existing_scc_cos_kms_key_crn"
@@ -270,7 +283,7 @@
               ]
             },
             {
-              "key": "skip_cos_kms_auth_policy"
+              "key": "skip_cos_kms_iam_auth_policy"
             },
             {
               "key": "scc_cos_key_ring_name"
@@ -355,7 +368,7 @@
               }
             },
             {
-              "key": "skip_scc_workload_protection_auth_policy"
+              "key": "skip_scc_workload_protection_iam_auth_policy"
             },
             {
               "key": "existing_event_notifications_crn"
