@@ -28,7 +28,7 @@ variable "existing_monitoring_crn" {
 
 variable "prefix" {
   type        = string
-  description = "The prefix to add to all resources that this solution creates. To not use any prefix value, you can set this value to `null` or an empty string."
+  description = "The prefix to add to all resources that this solution creates. If prefix input variable is specified, it's added to the resource name in the `<prefix>-name` format. To not use any prefix value, you can set this value to `null` or an empty string."
   default     = "dev"
   validation {
     condition = (var.prefix == null ? true :
@@ -103,7 +103,7 @@ variable "ibmcloud_kms_api_key" {
 variable "scc_cos_bucket_region" {
   type        = string
   default     = null
-  description = "The region to create the cos bucket.If not provided, scc_region will be used"
+  description = "The region to create the Object Storage bucket used by SCC. If not provided, the region specified in the `scc_region` input will be used."
 }
 
 variable "cos_instance_name" {
@@ -358,7 +358,7 @@ variable "scc_event_notifications_email_list" {
 # Context-based restriction (CBR)
 ##############################################################
 
-variable "cbr_rules" {
+variable "scc_instance_cbr_rules" {
   type = list(object({
     description = string
     account_id  = string

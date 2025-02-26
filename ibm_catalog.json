@@ -376,7 +376,7 @@
               "key": "scc_event_notifications_reply_to_email"
             },
             {
-              "key": "cbr_rules"
+              "key": "scc_instance_cbr_rules"
             }
           ],
           "iam_permissions": [
