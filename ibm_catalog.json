@@ -96,7 +96,7 @@
               ]
             },
             {
-              "key": "cos_region",
+              "key": "cos_bucket_region",
               "required": true,
               "type": "string",
               "custom_config": {

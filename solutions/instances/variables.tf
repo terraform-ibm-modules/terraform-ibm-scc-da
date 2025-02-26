@@ -100,10 +100,10 @@ variable "ibmcloud_kms_api_key" {
 # COS variables
 ########################################################################################################################
 
-variable "cos_region" {
+variable "cos_bucket_region" {
   type        = string
-  default     = "us-south"
-  description = "The region for the Object Storage instance."
+  default     = null
+  description = "The region to create the cos bucket.If not provided, scc_region will be used"
 }
 
 variable "cos_instance_name" {
