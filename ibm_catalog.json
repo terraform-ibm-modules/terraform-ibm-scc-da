@@ -175,7 +175,7 @@
               "key": "scc_cos_bucket_name"
             },
             {
-              "key": "cos_bucket_region",
+              "key": "scc_cos_bucket_region",
               "type": "string",
               "custom_config": {
                 "config_constraints": {

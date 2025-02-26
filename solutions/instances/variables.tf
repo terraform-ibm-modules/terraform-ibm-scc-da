@@ -100,7 +100,7 @@ variable "ibmcloud_kms_api_key" {
 # COS variables
 ########################################################################################################################
 
-variable "cos_bucket_region" {
+variable "scc_cos_bucket_region" {
   type        = string
   default     = null
   description = "The region to create the cos bucket.If not provided, scc_region will be used"

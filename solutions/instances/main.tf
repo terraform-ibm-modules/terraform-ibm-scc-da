@@ -58,7 +58,7 @@ locals {
   scc_cos_key_ring_name                     = try("${local.prefix}-${var.scc_cos_key_ring_name}", var.scc_cos_key_ring_name)
   scc_cos_key_name                          = try("${local.prefix}-${var.scc_cos_key_name}", var.scc_cos_key_name)
   cos_instance_name                         = try("${local.prefix}-${var.cos_instance_name}", var.cos_instance_name)
-  cos_bucket_region                         = var.cos_bucket_region != null ? var.cos_bucket_region : var.scc_region
+  scc_cos_bucket_region                     = var.scc_cos_bucket_region != null ? var.scc_cos_bucket_region : var.scc_region
   scc_instance_name                         = try("${local.prefix}-${var.scc_instance_name}", var.scc_instance_name)
   scc_workload_protection_instance_name     = try("${local.prefix}-${var.scc_workload_protection_instance_name}", var.scc_workload_protection_instance_name)
   scc_workload_protection_resource_key_name = try("${local.prefix}-${var.scc_workload_protection_instance_name}-key", "${var.scc_workload_protection_instance_name}-key")
@@ -175,7 +175,7 @@ locals {
     management_endpoint_type      = var.management_endpoint_type_for_bucket
     storage_class                 = var.scc_cos_bucket_class
     resource_instance_id          = local.cos_instance_crn
-    region_location               = local.cos_bucket_region
+    region_location               = local.scc_cos_bucket_region
     force_delete                  = true
     activity_tracking = {
       read_data_events  = true
