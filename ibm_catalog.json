@@ -186,16 +186,44 @@
                   "value": "us-south"
                 },
                 {
+                  "displayname": "Sydney (au-syd)",
+                  "value": "au-syd"
+                },
+                {
+                  "displayname": "Sao Paolo (br-sao)",
+                  "value": "br-sao"
+                },
+                {
+                  "displayname": "Toronto (ca-tor)",
+                  "value": "ca-tor"
+                },
+                {
+                  "displayname": "France (eu-fr2)",
+                  "value": "eu-fr2"
+                },
+                {
                   "displayname": "Frankfurt (eu-de)",
                   "value": "eu-de"
+                },
+                {
+                  "displayname": "London (eu-gb)",
+                  "value": "eu-gb"
                 },
                 {
                   "displayname": "Madrid (eu-es)",
                   "value": "eu-es"
                 },
                 {
-                  "displayname": "Toronto (ca-tor)",
-                  "value": "ca-tor"
+                  "displayname": "Osaka (jp-osa)",
+                  "value": "jp-osa"
+                },
+                {
+                  "displayname": "Tokyo (jp-tok)",
+                  "value": "jp-tok"
+                },
+                {
+                  "displayname": "Washington DC (us-east)",
+                  "value": "us-east"
                 }
               ]
             },
