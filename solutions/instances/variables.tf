@@ -100,10 +100,10 @@ variable "ibmcloud_kms_api_key" {
 # COS variables
 ########################################################################################################################
 
-variable "cos_region" {
+variable "scc_cos_bucket_region" {
   type        = string
-  default     = "us-south"
-  description = "The region for the Object Storage instance."
+  default     = null
+  description = "The region to create the Object Storage bucket used by SCC. If not provided, the region specified in the `scc_region` input will be used."
 }
 
 variable "cos_instance_name" {
@@ -166,7 +166,7 @@ variable "existing_scc_cos_bucket_name" {
   description = "The name of an existing bucket inside the existing Object Storage instance to use for Security and Compliance Center. If not specified, a bucket is created."
 }
 
-variable "skip_cos_kms_auth_policy" {
+variable "skip_cos_kms_iam_auth_policy" {
   type        = bool
   description = "Set to `true` to skip the creation of an IAM authorization policy that permits the Object Storage instance created to read the encryption key from the KMS instance. If set to false, pass in a value for the KMS instance in the `existing_kms_instance_crn` variable. If a value is specified for `ibmcloud_kms_api_key`, the policy is created in the KMS account."
   default     = false
@@ -204,7 +204,7 @@ variable "scc_region" {
   description = "The region to provision Security and Compliance Center resources in."
 }
 
-variable "skip_scc_cos_auth_policy" {
+variable "skip_scc_cos_iam_auth_policy" {
   type        = bool
   default     = false
   description = "Set to `true` to skip creation of an IAM authorization policy that permits the Security and Compliance Center to write to the Object Storage instance created by this solution. Applies only if `existing_scc_instance_crn` is not provided."
@@ -220,23 +220,23 @@ variable "scc_service_plan" {
   }
 }
 
-variable "existing_en_crn" {
+variable "existing_event_notifications_crn" {
   type        = string
   nullable    = true
   default     = null
   description = "The CRN of an Event Notification instance. Used to integrate with Security and Compliance Center."
 }
 
-variable "en_source_name" {
+variable "event_notifications_source_name" {
   type        = string
   default     = "compliance"
-  description = "The source name to use for the Event Notifications integration. Required if a value is passed for `en_instance_crn`. This name must be unique per SCC instance that is integrated with the Event Notifications instance."
+  description = "The source name to use for the Event Notifications integration. Required if a value is passed for `event_notifications_instance_crn`. This name must be unique per SCC instance that is integrated with the Event Notifications instance."
 }
 
-variable "en_source_description" {
+variable "event_notifications_source_description" {
   type        = string
   default     = null
-  description = "Optional description to give for the Event Notifications integration source. Only used if a value is passed for `en_instance_crn`."
+  description = "Optional description to give for the Event Notifications integration source. Only used if a value is passed for `event_notifications_instance_crn`."
 }
 
 variable "scc_instance_tags" {
@@ -245,7 +245,7 @@ variable "scc_instance_tags" {
   default     = []
 }
 
-variable "skip_scc_workload_protection_auth_policy" {
+variable "skip_scc_workload_protection_iam_auth_policy" {
   type        = bool
   default     = false
   description = "Set to `true` to skip creating an IAM authorization policy that permits the Security and Compliance Center instance to read from the Workload Protection instance. Applies only if `provision_scc_workload_protection` is true."
@@ -336,19 +336,19 @@ variable "scc_workload_protection_access_tags" {
 # EN Configuration variables
 ########################################################################################################################
 
-variable "scc_en_from_email" {
+variable "scc_event_notifications_from_email" {
   type        = string
-  description = "The `from` email address used in any Security and Compliance Center events from Event Notifications."
+  description = "The `from` email address used in any Security and Compliance Center events coming via Event Notifications."
   default     = "compliancealert@ibm.com"
 }
 
-variable "scc_en_reply_to_email" {
+variable "scc_event_notifications_reply_to_email" {
   type        = string
-  description = "The `reply_to` email address used in any Security and Compliance Center events from Event Notifications."
+  description = "The `reply_to` email address used in any Security and Compliance Center events coming via Event Notifications."
   default     = "no-reply@ibm.com"
 }
 
-variable "scc_en_email_list" {
+variable "scc_event_notifications_email_list" {
   type        = list(string)
   description = "The list of email addresses to notify when Security and Compliance Center triggers an event."
   default     = []
@@ -358,7 +358,7 @@ variable "scc_en_email_list" {
 # Context-based restriction (CBR)
 ##############################################################
 
-variable "cbr_rules" {
+variable "scc_instance_cbr_rules" {
   type = list(object({
     description = string
     account_id  = string
