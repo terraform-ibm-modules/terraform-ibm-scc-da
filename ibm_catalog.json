@@ -146,9 +146,6 @@
               "key": "existing_scc_instance_crn"
             },
             {
-              "key": "existing_cos_instance_crn"
-            },
-            {
               "key": "cos_instance_name"
             },
             {
@@ -280,6 +277,9 @@
                   "value": "public"
                 }
               ]
+            },
+            {
+              "key": "existing_cos_instance_crn"
             },
             {
               "key": "existing_monitoring_crn"
