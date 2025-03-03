@@ -117,9 +117,6 @@
               ]
             },
             {
-              "key": "existing_scc_instance_crn"
-            },
-            {
               "key": "scc_instance_name"
             },
             {
@@ -144,6 +141,9 @@
                   "value": "security-compliance-center-trial-plan"
                 }
               ]
+            },
+            {
+              "key": "existing_scc_instance_crn"
             },
             {
               "key": "existing_cos_instance_crn"
@@ -196,10 +196,6 @@
                 {
                   "displayname": "Toronto (ca-tor)",
                   "value": "ca-tor"
-                },
-                {
-                  "displayname": "France (eu-fr2)",
-                  "value": "eu-fr2"
                 },
                 {
                   "displayname": "Frankfurt (eu-de)",
