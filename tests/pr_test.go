@@ -160,7 +160,7 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 			ImplicitRequired: false,
 			TerraformVars: map[string]interface{}{
 				"prefix":                              prefix,
-				"cos_region":                          region,
+				"scc_cos_bucket_region":               region,
 				"scc_region":                          region,
 				"resource_group_name":                 terraform.Output(t, existingTerraformOptions, "resource_group_name"),
 				"use_existing_resource_group":         true,
