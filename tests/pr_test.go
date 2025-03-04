@@ -71,7 +71,7 @@ func TestInstancesInSchematics(t *testing.T) {
 		{Name: "resource_group_name", Value: options.Prefix, DataType: "string"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "scc_region", Value: region, DataType: "string"},
-		{Name: "cos_region", Value: region, DataType: "string"},
+		{Name: "scc_cos_bucket_region", Value: region, DataType: "string"},
 		{Name: "cos_instance_tags", Value: options.Tags, DataType: "list(string)"},
 		{Name: "scc_instance_tags", Value: options.Tags, DataType: "list(string)"},
 		{Name: "scc_workload_protection_instance_tags", Value: options.Tags, DataType: "list(string)"},
@@ -160,7 +160,7 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 			ImplicitRequired: false,
 			TerraformVars: map[string]interface{}{
 				"prefix":                              prefix,
-				"cos_region":                          region,
+				"scc_cos_bucket_region":               region,
 				"scc_region":                          region,
 				"resource_group_name":                 terraform.Output(t, existingTerraformOptions, "resource_group_name"),
 				"use_existing_resource_group":         true,
@@ -189,7 +189,7 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 			Region:           region,
 			TerraformVars: map[string]interface{}{
 				"prefix":                              prefix,
-				"cos_region":                          region,
+				"scc_cos_bucket_region":               region,
 				"scc_region":                          region,
 				"resource_group_name":                 terraform.Output(t, existingTerraformOptions, "resource_group_name"),
 				"use_existing_resource_group":         true,
@@ -199,8 +199,8 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 				"management_endpoint_type_for_bucket": "public",
 				"provider_visibility":                 "public",
 				// Temporarily removed because of provider issue: https://github.com/IBM-Cloud/terraform-provider-ibm/issues/5890
-				// "existing_en_crn":                     terraform.Output(t, existingTerraformOptions, "en_crn"),
-				// "en_source_name":                      prefix, // This name must be unique per SCC instance that is integrated with the Event Notifications instance.
+				// "existing_event_notifications_crn":                     terraform.Output(t, existingTerraformOptions, "en_crn"),
+				// "event_notifications_source_name":                      prefix, // This name must be unique per SCC instance that is integrated with the Event Notifications instance.
 			},
 		})
 
