@@ -71,7 +71,7 @@ func TestInstancesInSchematics(t *testing.T) {
 		{Name: "resource_group_name", Value: options.Prefix, DataType: "string"},
 		{Name: "existing_kms_instance_crn", Value: permanentResources["hpcs_south_crn"], DataType: "string"},
 		{Name: "scc_region", Value: region, DataType: "string"},
-		{Name: "cos_region", Value: region, DataType: "string"},
+		{Name: "scc_cos_bucket_region", Value: region, DataType: "string"},
 		{Name: "cos_instance_tags", Value: options.Tags, DataType: "list(string)"},
 		{Name: "scc_instance_tags", Value: options.Tags, DataType: "list(string)"},
 		{Name: "scc_workload_protection_instance_tags", Value: options.Tags, DataType: "list(string)"},
@@ -189,7 +189,7 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 			Region:           region,
 			TerraformVars: map[string]interface{}{
 				"prefix":                              prefix,
-				"cos_region":                          region,
+				"scc_cos_bucket_region":               region,
 				"scc_region":                          region,
 				"resource_group_name":                 terraform.Output(t, existingTerraformOptions, "resource_group_name"),
 				"use_existing_resource_group":         true,
