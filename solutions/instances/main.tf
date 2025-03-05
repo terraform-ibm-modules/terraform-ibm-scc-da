@@ -241,24 +241,25 @@ moved {
 }
 
 module "scc" {
-  source                            = "terraform-ibm-modules/scc/ibm"
-  existing_scc_instance_crn         = var.existing_scc_instance_crn
-  version                           = "1.11.2"
-  resource_group_id                 = module.resource_group.resource_group_id
-  region                            = local.scc_instance_region
-  instance_name                     = local.scc_instance_name
-  plan                              = var.scc_service_plan
-  cos_bucket                        = local.scc_cos_bucket_name
-  cos_instance_crn                  = local.cos_instance_crn
-  en_instance_crn                   = var.existing_event_notifications_crn
-  en_source_name                    = var.event_notifications_source_name
-  en_source_description             = var.event_notifications_source_description
-  skip_cos_iam_authorization_policy = var.skip_scc_cos_iam_auth_policy
-  resource_tags                     = var.scc_instance_tags
-  attach_wp_to_scc_instance         = var.provision_scc_workload_protection && var.existing_scc_instance_crn == null
-  wp_instance_crn                   = var.provision_scc_workload_protection && var.existing_scc_instance_crn == null ? module.scc_wp[0].crn : null
-  skip_scc_wp_auth_policy           = var.skip_scc_workload_protection_iam_auth_policy
-  cbr_rules                         = var.scc_instance_cbr_rules
+  source                                 = "terraform-ibm-modules/scc/ibm"
+  existing_scc_instance_crn              = var.existing_scc_instance_crn
+  version                                = "1.11.2"
+  resource_group_id                      = module.resource_group.resource_group_id
+  region                                 = local.scc_instance_region
+  instance_name                          = local.scc_instance_name
+  plan                                   = var.scc_service_plan
+  cos_bucket                             = local.scc_cos_bucket_name
+  cos_instance_crn                       = local.cos_instance_crn
+  enable_event_notifications_integration = var.existing_event_notifications_crn == null ? false : true
+  en_instance_crn                        = var.existing_event_notifications_crn
+  en_source_name                         = var.event_notifications_source_name
+  en_source_description                  = var.event_notifications_source_description
+  skip_cos_iam_authorization_policy      = var.skip_scc_cos_iam_auth_policy
+  resource_tags                          = var.scc_instance_tags
+  attach_wp_to_scc_instance              = var.provision_scc_workload_protection && var.existing_scc_instance_crn == null
+  wp_instance_crn                        = var.provision_scc_workload_protection && var.existing_scc_instance_crn == null ? module.scc_wp[0].crn : null
+  skip_scc_wp_auth_policy                = var.skip_scc_workload_protection_iam_auth_policy
+  cbr_rules                              = var.scc_instance_cbr_rules
 }
 
 #######################################################################################################################

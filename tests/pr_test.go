@@ -188,19 +188,18 @@ func TestRunExistingResourcesInstances(t *testing.T) {
 			ImplicitRequired: false,
 			Region:           region,
 			TerraformVars: map[string]interface{}{
-				"prefix":                                 prefix,
-				"scc_cos_bucket_region":                  region,
-				"scc_region":                             region,
-				"resource_group_name":                    terraform.Output(t, existingTerraformOptions, "resource_group_name"),
-				"use_existing_resource_group":            true,
-				"existing_monitoring_crn":                terraform.Output(t, existingTerraformOptions, "monitoring_crn"),
-				"existing_scc_cos_bucket_name":           terraform.Output(t, existingTerraformOptions, "bucket_name"),
-				"existing_cos_instance_crn":              terraform.Output(t, existingTerraformOptions, "cos_crn"),
-				"management_endpoint_type_for_bucket":    "public",
-				"provider_visibility":                    "public",
-				"enable_event_notifications_integration": true,
-				"existing_event_notifications_crn":       terraform.Output(t, existingTerraformOptions, "en_crn"),
-				"event_notifications_source_name":        prefix, // This name must be unique per SCC instance that is integrated with the Event Notifications instance.
+				"prefix":                              prefix,
+				"scc_cos_bucket_region":               region,
+				"scc_region":                          region,
+				"resource_group_name":                 terraform.Output(t, existingTerraformOptions, "resource_group_name"),
+				"use_existing_resource_group":         true,
+				"existing_monitoring_crn":             terraform.Output(t, existingTerraformOptions, "monitoring_crn"),
+				"existing_scc_cos_bucket_name":        terraform.Output(t, existingTerraformOptions, "bucket_name"),
+				"existing_cos_instance_crn":           terraform.Output(t, existingTerraformOptions, "cos_crn"),
+				"management_endpoint_type_for_bucket": "public",
+				"provider_visibility":                 "public",
+				"existing_event_notifications_crn":    terraform.Output(t, existingTerraformOptions, "en_crn"),
+				"event_notifications_source_name":     prefix, // This name must be unique per SCC instance that is integrated with the Event Notifications instance.
 			},
 		})
 
