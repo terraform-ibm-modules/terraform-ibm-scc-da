@@ -126,7 +126,7 @@ module "kms" {
   }
   count                       = local.use_kms_module ? 1 : 0 # no need to create any KMS resources if passing an existing key or bucket, or SCC instance
   source                      = "terraform-ibm-modules/kms-all-inclusive/ibm"
-  version                     = "4.21.1"
+  version                     = "4.21.2"
   create_key_protect_instance = false
   region                      = local.kms_region
   existing_kms_instance_crn   = var.existing_kms_instance_crn
