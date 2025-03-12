@@ -1,11 +1,4 @@
-# Configuring complex inputs for SCC in IBM Cloud projects
-
-Several optional input variables in the IBM Cloud [SCC Deployable architecture](https://cloud.ibm.com/catalog#deployable_architecture) use complex object types. You specify these inputs when you configure deployable architecture.
-
-* Context-Based Restrictions Rules (`scc_instance_cbr_rules`)
-
-
-## Rules For Context-Based Restrictions <a name="scc_instance_cbr_rules"></a>
+# Configuring Context-Based Restrictions (CBRs) <a name="scc_instance_cbr_rules"></a>
 
 The `scc_instance_cbr_rules` input variable allows you to provide a rule for the target service to enforce access restrictions for the service based on the context of access requests. Contexts are criteria that include the network location of access requests, the endpoint type from where the request is sent, etc.
 
@@ -28,13 +21,13 @@ The `scc_instance_cbr_rules` input variable allows you to provide a rule for the
       - `report` - The restrictions are evaluated and reported, but not enforced.
   - `operations` (optional): The operations this rule applies to
     - `api_types`(required): (List) The API types this rule applies to.
-        - `api_type_id`(required):The API type ID
+        - `api_type_id`(required): The API type ID
 
 
 ### Example Rule For Context-Based Restrictions Configuration
 
 ```hcl
-scc_instance_cbr_rules = [
+[
   {
     "description"     : "SCC Instance can be accessed from xyz"
     "account_id"      : "defc0df06b644a9cabc6e44f55b3880s."
@@ -46,7 +39,7 @@ scc_instance_cbr_rules = [
         },
         {
           "name"  : "networkZoneId"
-          "value" : "93a51a1debe2674193217209601dde6f" # pragma: allowlist secret
+          "value" : "93a51a1debe2674193217209601dde6f"
         }
       ]
     }]

@@ -27,6 +27,19 @@ module "cos" {
 }
 
 ##############################################################################
+# Workload Protection
+##############################################################################
+
+module "scc_wp" {
+  source            = "terraform-ibm-modules/scc-workload-protection/ibm"
+  version           = "1.4.3"
+  name              = var.prefix
+  region            = var.region
+  resource_group_id = module.resource_group.resource_group_id
+  resource_tags     = var.resource_tags
+}
+
+##############################################################################
 # Cloud Monitoring
 ##############################################################################
 
@@ -51,6 +64,5 @@ module "event_notifications" {
   name              = "${var.prefix}-en"
   tags              = var.resource_tags
   plan              = "lite"
-  service_endpoints = "public"
   region            = var.region
 }

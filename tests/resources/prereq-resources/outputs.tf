@@ -12,6 +12,11 @@ output "prefix" {
   description = "Prefix"
 }
 
+output "region" {
+  value       = var.region
+  description = "region"
+}
+
 output "cos_crn" {
   description = "COS CRN"
   value       = module.cos.cos_instance_crn
@@ -30,4 +35,9 @@ output "monitoring_crn" {
 output "en_crn" {
   description = "Event Notification CRN"
   value       = module.event_notifications.crn
+}
+
+output "wp_crn" {
+  description = "Workload Protection CRN"
+  value       = module.scc_wp.crn
 }
