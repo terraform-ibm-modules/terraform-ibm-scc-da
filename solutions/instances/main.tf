@@ -196,7 +196,7 @@ module "cos" {
   }
   count                    = var.existing_scc_cos_bucket_name == null && var.existing_scc_instance_crn == null ? 1 : 0 # no need to call COS module if consumer is passing existing SCC instance or COS bucket
   source                   = "terraform-ibm-modules/cos/ibm//modules/fscloud"
-  version                  = "8.19.8"
+  version                  = "8.20.2"
   resource_group_id        = module.resource_group.resource_group_id
   create_cos_instance      = var.existing_cos_instance_crn == null ? true : false # don't create instance if existing one passed in
   cos_instance_name        = local.cos_instance_name
@@ -215,7 +215,7 @@ module "buckets" {
   count          = local.create_cross_account_auth_policy ? 1 : 0
   depends_on     = [time_sleep.wait_for_authorization_policy[0]]
   source         = "terraform-ibm-modules/cos/ibm//modules/buckets"
-  version        = "8.19.8"
+  version        = "8.20.2"
   bucket_configs = local.bucket_config
 }
 
@@ -333,7 +333,7 @@ module "create_profile_attachment" {
 module "scc_wp" {
   count                         = var.provision_scc_workload_protection && var.existing_scc_instance_crn == null ? 1 : 0
   source                        = "terraform-ibm-modules/scc-workload-protection/ibm"
-  version                       = "1.4.3"
+  version                       = "1.5.2"
   name                          = local.scc_workload_protection_instance_name
   region                        = var.scc_region
   resource_group_id             = module.resource_group.resource_group_id
