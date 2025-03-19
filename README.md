@@ -1,5 +1,9 @@
 # Security and Compliance Center solution
 
+---
+🕸️ Archived: This repo is no longer maintained and is archived. A refactored version of the SCC DA can be found in: https://github.com/terraform-ibm-modules/terraform-ibm-scc
+---
+
 [![Stable (With quality checks)](https://img.shields.io/badge/Status-Stable%20(With%20quality%20checks)-green)](https://terraform-ibm-modules.github.io/documentation/#/badge-status)
 [![latest release](https://img.shields.io/github/v/release/terraform-ibm-modules/terraform-ibm-scc-da?logo=GitHub&sort=semver)](https://github.com/terraform-ibm-modules/terraform-ibm-scc-da/releases/latest)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
